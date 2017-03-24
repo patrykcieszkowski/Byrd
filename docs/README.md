@@ -1,5 +1,6 @@
 # Byrd
 
+
 * **ENVIROMENTAL VARIABLES:**
 
   All `process.ENV` variables are stored in `~/app/.env` file, and are loaded once, on application start-up, with help of `dotenv` module. Module should be executed before any other action is being made, unless `process.ENV` variables aren't required for the task.
