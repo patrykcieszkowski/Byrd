@@ -1,3 +1,8 @@
+
+ <p align="center">
+  <img src="http://i.imgur.com/x7F2UCf.png" height="350" alt="Byrd's Logo"/>
+</p>
+
 # Byrd
 
 * **ENVIROMENTAL VARIABLES:**
