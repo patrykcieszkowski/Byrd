@@ -1,22 +1,36 @@
 import { verifyJWTToken } from './libs/auth'
 
-export function authDetails_MW(req, res, next)
+/*
+  Verifies whether required arguments are passed with HTTP request
+  • list: array - [String]
+*/
+export function paramCheck(list)
 {
-  let { email, password } = req.body
-  if (!email || !password)
+  return (req, res, next) =>
   {
-    return res.status(400)
-            .json({ message: "Missing auth data." })
-  }
+    let _paramList = (req.method === 'POST') ? req.body : req.params
+    list.forEach((el) =>
+    {
+      if (!Object.keys(_paramList).includes(el) || _paramList[el].length < 1)
+      {
+        return res.status(400)
+                .json({
+                  message: `Missing arguments (${el})`
+                })
+      }
 
-  next()
+    })
+
+    next()
+  }
 }
 
 export function verifyJWT_MW(req, res, next)
 {
-  let { token } = req.body
+  let token = (req.method === 'POST') ? req.body.token : req.query.token
+  
   verifyJWTToken(token)
-    .then((decodedToken) => 
+    .then((decodedToken) =>
     {
       req.user = decodedToken.data
       next()
