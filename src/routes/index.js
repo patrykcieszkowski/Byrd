@@ -1,8 +1,6 @@
 import auth from './auth'
-import contacts from './contacts'
 
-export default 
+export default
 {
-  auth,
-  contacts
+  auth
 }
