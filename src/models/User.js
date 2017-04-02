@@ -1,5 +1,5 @@
-import mongoose, {Schema} from 'mongoose'
-import {isEmail} from 'validator'
+import mongoose, { Schema } from 'mongoose'
+import { isEmail } from 'validator'
 import bcrypt from 'bcrypt'
 
 mongoose.Promise = global.Promise
@@ -14,13 +14,30 @@ const userSchema = new Schema({
     validate: {
       isAsync: true,
       validator: isEmail,
-      message: 'Invalid email format.'
+      message: "Invalid email format."
     }
   },
   password: {
     type: String,
     required: true,
     minlength: [8, "Password must have at least 6 chars."]
+  },
+  first_name: {
+    type: String,
+    required: true,
+    minlength: [3, "Name needs to be at least 3 chars long."]
+  },
+  last_name: {
+    type: String,
+    required: true,
+    minlength: [3, "Name needs to be at least 3 chars long."]
+  },
+  gender: {
+    type: Number
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
 }, {
   toJSON: {
@@ -36,16 +53,22 @@ const userSchema = new Schema({
 userSchema.pre('save', function(next)
 {
   let _user = this
-  
+
   /*
     Hash the password, if field was modified.
   */
   if (_user.isModified('password'))
   {
-    _user.password = bcrypt.hashSync(_user.password, bcrypt.genSaltSync(10))
+    bcrypt.hash(_user.password, 10, (err, hash) =>
+    {
+      _user.password = hash
+      return next()
+    })
   }
-  
-  return next()
+  else
+  {
+    return next()
+  }
 })
 
 userSchema.post('save', (err, doc, next) =>
