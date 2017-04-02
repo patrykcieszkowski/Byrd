@@ -8,17 +8,19 @@ export function paramCheck(list)
 {
   return (req, res, next) =>
   {
-    let _paramList = (req.method === 'POST') ? req.body : req.params
     list.forEach((el) =>
     {
-      if (!Object.keys(_paramList).includes(el) || _paramList[el].length < 1)
+      // split if possible - if not, set as array
+      const _el = (el.includes(':')) ? el.split(':') : [el, 'query']
+      const _paramList = req[_el[1]]
+
+      if (!Object.keys(_paramList).includes(_el[0]) || _paramList[_el[0]].length < 1)
       {
         return res.status(400)
                 .json({
                   message: `Missing arguments (${el})`
                 })
       }
-
     })
 
     next()
@@ -28,7 +30,7 @@ export function paramCheck(list)
 export function verifyJWT_MW(req, res, next)
 {
   let token = (req.method === 'POST') ? req.body.token : req.query.token
-  
+
   verifyJWTToken(token)
     .then((decodedToken) =>
     {

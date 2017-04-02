@@ -2,8 +2,8 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 
 import db from '../models'
-import {createJWToken} from '../libs/auth'
-import {authDetails_MW} from '../middlewares'
+import { createJWToken } from '../libs/auth'
+import { paramCheck } from '../middlewares'
 
 const router = express.Router()
 
@@ -11,7 +11,7 @@ const router = express.Router()
   ROUTES
 */
 
-router.post('/login', paramCheck(['email', 'password']))
+router.post('/login', paramCheck(['email:body', 'password:body']))
 router.post('/login', (req, res) =>
 {
   let { email, password } = req.body
@@ -40,10 +40,10 @@ router.post('/login', (req, res) =>
   })
 })
 
-router.post('/signup', paramCheck(['first_name', 'last_name', 'email', 'password']))
+router.post('/signup', paramCheck(['first_name:body', 'last_name:body', 'email:body', 'password:body']))
 router.post('/signup', (req, res) =>
 {
-  let { first_name, last_name, mail, password } = req.body
+  let { first_name, last_name, email, password } = req.body
 
   const user = db.User({
     first_name,
