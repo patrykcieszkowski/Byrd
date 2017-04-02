@@ -11,12 +11,11 @@ const router = express.Router()
   ROUTES
 */
 
-router.post('*', authDetails_MW)
-
-router.post('/login', (req, res) => 
+router.post('/login', paramCheck(['email', 'password']))
+router.post('/login', (req, res) =>
 {
   let { email, password } = req.body
-  
+
   db.User.findByEmail(email)
   .then((user) => (!user) ? Promise.reject('User not found.') : user)
   .then((user) => user.comparePassword(password))
@@ -41,17 +40,20 @@ router.post('/login', (req, res) =>
   })
 })
 
-router.post('/signup', (req, res) => 
+router.post('/signup', paramCheck(['first_name', 'last_name', 'email', 'password']))
+router.post('/signup', (req, res) =>
 {
-  let { email, password } = req.body
+  let { first_name, last_name, mail, password } = req.body
 
   const user = db.User({
+    first_name,
+    last_name,
     email,
     password
   })
 
   user.save()
-    .then((user) => user.publicParse(user))  
+    .then((user) => user.publicParse(user))
     .then((user) =>
     {
       res.status(200)
