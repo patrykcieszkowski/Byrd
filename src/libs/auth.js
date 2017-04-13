@@ -1,14 +1,16 @@
 import jwt from 'jsonwebtoken'
 import _ from 'lodash'
 
+import config from '../config'
+
 /*
   checks whether provided token is valid or not; based on it's signature and expire date
 */
-export function verifyJWTToken(token, callback) 
+export function verifyJWTToken(token, callback)
 {
   return new Promise((resolve, reject) =>
   {
-    jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => 
+    jwt.verify(token, config.JWT_SECRET, (err, decodedToken) =>
     {
       if (err || !decodedToken)
       {
@@ -42,7 +44,7 @@ export function createJWToken(details)
   }, {})
 
   let token = jwt.sign({
-    data: details.sessionData }, process.env.JWT_SECRET, {
+    data: details.sessionData }, config.JWT_SECRET, {
     expiresIn: details.maxAge,
     algorithm: 'HS256'
   })
