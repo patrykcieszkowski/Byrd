@@ -1,6 +1,12 @@
 import auth from './auth'
+import company from './company'
+import chat from './chat'
+import widget from './widget'
 
 export default
 {
-  auth
+  auth,
+  company,
+  chat,
+  widget,
 }

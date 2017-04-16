@@ -26,7 +26,7 @@ router.post('/login', (req, res) =>
       .json({
         status: true,
         token: createJWToken({
-            sessionData: user,
+            sessionData: { data: user, type: 0},
             maxAge: 3600
           })
       })
