@@ -9,11 +9,11 @@ const chatSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
-  _company: {
-    type: Schema.ObjectId,
-    ref: 'Company',
-    required: true
-  },
+  // _company: {
+  //   type: Schema.ObjectId,
+  //   ref: 'Company',
+  //   required: true
+  // },
   _widget: {
     type: Schema.ObjectId,
     ref: 'Widget',
@@ -23,8 +23,8 @@ const chatSchema = new Schema({
     email: {
       type: String,
       required: true,
-      unique: true,
-      dropDups: true,
+      unique: false,
+      dropDups: false,
       minlength: [5],
       validate: {
         isAsync: true,
@@ -58,8 +58,9 @@ const chatSchema = new Schema({
   }
 })
 
-idExists.forPath(chatSchema.path('_company'))
+// idExists.forPath(chatSchema.path('_company'))
 idExists.forPath(chatSchema.path('_agents'))
+idExists.forPath(chatSchema.path('_widget'))
 
 const Chat = mongoose.model('Chat', chatSchema)
 export default Chat
